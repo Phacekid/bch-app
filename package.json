@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@bitauth/libauth": "^2.0.0-alpha.8",
     "mainnet-js": "^2.3.0",
     "vue": "^3.3.11"
   },

@@ -1,17 +1,21 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-import { Wallet } from 'mainnet-js'
+import Nftitem from './components/Nftitem.vue'
 import {ref, onMounted} from 'vue';
+import {vmNumberToBigInt, hexToBin} from '@bitauth/libauth'
 
-const address = ref('address');
-const balance = ref('')
+const listCommitments = ["7604", "a704", "bf04"]
+const ninjaList = []
+for (const commitment of listCommitments) {
+  ninjaList.push({
+    commitment: commitment,
+    nftNumber: vmNumberToBigInt(hexToBin(commitment)) + 1n
+  })
+}
+
+const ninjas = ref(ninjaList)
 
 onMounted(async () => {
-  const wallet = await Wallet.newRandom()
-  address.value = wallet.address
-  balance.value = await wallet.getBalance('sat')
-  // console.log(wallet.address)
 })
 </script>
 
@@ -21,14 +25,14 @@ onMounted(async () => {
 
     <div class="wrapper">
       <HelloWorld msg="First BCH APP!" />
-      {{ address }}
-      balance: {{ balance }}
     </div>
   </header>
 
-  <main>
-    <TheWelcome />
-  </main>
+  <main style="margin-top: 50px; display: flex;">
+<div v-for="ninja in ninjas"> 
+<Nftitem :commitment="ninja.commitment" :nftNumber="ninja.nftNumber" />
+</div>
+</main>
 </template>
 
 <style scoped>
@@ -46,6 +50,7 @@ header {
     display: flex;
     place-items: center;
     padding-right: calc(var(--section-gap) / 2);
+    width: 1000px;
   }
 
   .logo {
